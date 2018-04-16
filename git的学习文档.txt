@@ -5,7 +5,7 @@
 	1.使用cd指令指定路径(根目录是"/")
 	2.pwd指令查看当前的目录
 	3.git init指令在当前目录下创建本地仓库
-	4.git add指令添加文件到仓库，git commit指令提交文件到仓库
+	4.git add指令添加文件到仓库，git commit -m 指令提交文件到仓库
 	5.git log查看log
 
 
@@ -38,7 +38,32 @@
 	 3、克隆的命令:(Clone or download)
 		git clone 克隆的路径
 
-		
+
+
+三、将本地仓库的文件上传到GitHub上。
+	
+	1、将文件拉到自己创建的Git本地仓库中
+	2、git add 需要上传的文件名称
+	3、git commit -m "添加的注释方便以后自己查看"   (和SVN中的注释起到相同的作用)
+	4、在GitHub的页面上创建一个新的仓库 New repository 让后填写新的仓库的名称 Repository name 点击 Create Repository
+	   即可。
+	5、然后再Git命令窗口 git remote add origin https://github.com/971241724/studyFiled.git(自己远程仓库的地址)(git远程添加起源)
+	6、git push -u origin master(即添加自己GitHub的邮箱和密码)
+
+
+四、Git的注意事项：
+	1、在GitHub上只能删除仓库，无法删除文件夹以及文件，所以只能通过命令来删除。
+	2、如果对Git的命令不熟悉使用帮助：git --help  (帮助命令)。
+	3、删除GitHub上的文件。
+	   (1)、将远程仓库拉下来：git pull origin master
+	   (2)、查看有哪些文件：dir
+	   (3)、删除文件：git rm -r --cached 文件名称	 
+	   (4)、添加注释：git commit -m "删除的文件名称"
+	4、更新GitHub上的文件
+
+
+
+
 
 
 	直播架构:
