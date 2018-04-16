@@ -1,0 +1,60 @@
+
+
+一、使用自定义的Java代码操作字符串的两种方式。
+    
+    (1)、将自己写好的Java代码打成jar包
+
+         (现将源文件变异成字节码文件，在将字节码文件打成jar包)
+	 命令如下：jar cvf xxx.jar xxx.class
+
+    (2)、将jar包放在kettle的data-integration/lib 目录下
+
+    (3)、在转换中使用"Janino计算Java表达式"这个控件
+	
+
+	
+
+
+
+	近期整理的各种最新全套视频+实战视频，java、大数据、人工智能、python、前端、架构师等都有，需要的可私聊或加微信pencilseo（有问题可解答）
+
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+一、kettle中常用的JS函数
+    URL:http://blog.csdn.net/god_father_kao/article/details/70344809
+
+
+二、
+
+
+

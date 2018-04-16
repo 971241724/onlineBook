@@ -1,0 +1,270 @@
+
+
+
+
+
+
+                          提高代码质量
+
+
+(1)   高质量代码有三要素：可读性、可维护性、可变更性。
+(2)   从另一个比较专业的评价标准来说，它没有实现低耦合、高内聚。我给大家的建议是，将这些相     对独立的段落另外封装成一个又一个的函数。
+(3)   在编写代码的过程中应当养成不断重构的习惯。
+(4)   对公用的代码进行提取，提取为公用的方法，降低代码在系统中大面积的出现，提高代码的复用     性。
+
+
+                           
+
+                           数据库忘记的概念
+                            
+（1）视图:
+
+       视图是一张虚拟表，可以是表中数据记录的子集，也可以是表中某几个字段形成的子集。视图可   以参照一张或多张基表。
+
+       例子:   create view emp
+               AS 
+               select XXX,XXX,XXX
+               from XXXXX
+               where  XXX = XXX;
+                
+
+（2）存储过程:
+
+     传统的SQL请求来自于客户机端，与之不同，存储过程包含的SQL请求来自服务器端，并且在服务器端处理。SQL请求被服务器端的数据库管理软件激活，传递给解析器，请求和应答被创建、处理，并可以返回给存储过程。存储过程将结果集、状态码或计算结果返回给客户端应用。
+     
+
+     1》存储过程的创建:
+
+      例子:    create procedure test_pro
+               (IN pl INTEGER,OUT pmsg CHAR(20))
+               begin
+                 if pl>0 then
+                   set pmsg = "00000";
+                 elseif pl=0 then
+                   set pmsg = "11111";
+                 else
+                   set pmsg = "sssss";
+                 end if;
+               end;
+      
+      在存储过程中可以定义三种参数
+ 
+      IN-----在执行时，给存储过程提供值
+      OUT----调用完成后，值从存储过程返回给用户
+      INOUT--即给存储过程提供值，也从存储过程返回值。
+      （存储过程的参数最多是1024个）
+      
+      创建存储过程的语句规范:
+      
+      > IN、OUT、INOUT 参数必须在存储过程之后，说明数据类型。
+      > 存储过程主体必须包含在begin和end语句之间。
+      > IF语句可以有多个elseif和一个else。
+      > IF语句必须以end if语句结尾。
+      > set语句用于给参数赋值或给说明的变量赋值。
+      > set、end if、end都以分号“；”结尾。
+     
+     2》存储过程的调用:
+        
+	CALL proceduer_name(12,pmsg);
+
+     3》查看存储过程
+
+        show create procedure proc_name;
+
+     4》删除存储过程
+
+        drop procedure your_proc_name;
+
+
+
+
+
+  （3）索引（分类: 普通索引、唯一索引、全文索引、单列索引和多列索引、组合索引）
+      (
+          搜索的连接:
+	  http://blog.csdn.net/xluren/article/details/32746183
+	  http://blog.csdn.net/u011156212/article/details/45822009
+      )
+
+      索引是快速搜索的关键，索引分为单索引和组合索引。单索引只包含单个列，一个表可以有多个单索引，但这不是组合索引。
+   组合索引即一个索引多个列。
+      
+      1》表结构:
+
+      CREATE TABLE mytable(   ID INT NOT NULL,    username VARCHAR(16) NOT NULL  );
+
+      2》普通索引的创建:
+
+      CREATE INDEX indexName ON mytable(username(length)); 如果是CHAR，VARCHAR类型，length可以小于字段实际长度；如果是BLOB和TEXT类型，必须指定length。
+                   （索引名）   （表名）（表中所的对应列名）
+      
+      3》唯一索引的创建:
+
+      CREATE UNIQUE INDEX indexName ON mytable(username(length));
+
+      4》全文索引的创建:
+
+      ==>创建表的适合添加全文索引 
+        CREATE TABLE table( 
+           id int(11) NOT NULL AUTO_INCREMENT , 
+           title char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL , 
+           content text CHARACTER SET utf8 COLLATE utf8_general_ci NULL , 
+           time int(10) NULL DEFAULT NULL , 
+	   PRIMARY KEY (id), 
+           FULLTEXT (content) 
+        ); 
+
+      ==>修改表结构添加全文索引 
+
+        ALTER TABLE article ADD FULLTEXT index_content(content) 
+
+      ==>直接创建索引 
+
+        CREATE FULLTEXT INDEX index_content ON article(content) 
+
+
+      5》删除索引:
+
+      DROP INDEX[indexName] ON mytable   
+                (索引的名称)
+
+      6》
+         1> 索引不包含空值的列。
+
+
+
+  （4）触发器（trigger）
+      
+         触发器是由某个事件来触发某个操作的，这些事件包括INSERT、UPDATE、DELETE语句，
+     如果定义了触发程序，当数据库执行了这些语句的时候就会激活触发器执行相应的操作。
+     
+     1》触发器创建语句:
+     
+     create trigger trigger_name after|before
+                   （触发器名称）（table_name执行insert|update|delete操作之前或之后）
+     insert|update|delete on table_name
+     （table_name的操作）
+     for each ROW
+     begin
+       insert into table_name(xx,xx,xx) values(xx,xx,xx);
+                     (另一个表)
+       insert into table_name(xx,xx,xx) values(xx,xx,xx);
+                     (另一个表)
+     end
+
+
+     2》查看触发器列表:
+
+        show triggers 
+        
+	查看指定的触发器:
+
+	show trigger trigger_name
+	             (触发器名称)
+
+     3》删除触发器:
+
+        drop trigger DB_name.trigger_name
+                    （数据库名）（触发器名）
+
+        如果不加数据库名那么删除的是当前数据库的触发器例：
+
+	drop trigger trigger_name
+
+
+
+                           
+               
+			     Oracle数据库
+
+（1）数据存储的细节（最大存储容量）
+	
+	{字段类型|中文说明|限制条件|其它说明}
+	{
+		CHAR|固定长度字符串|最大长度2000|bytes
+		VARCHAR2|可变长度的字符串|最大长度4000|bytes可做索引的最大长度749
+		NCHAR|根据字符集而定的固定长度字符串|最大长度2000|bytes
+		NVARCHAR2|根据字符集而定的可变长度字符串|最大长度4000|bytes
+		DATE|日期(日-月-年)DD-MM-YY(HH-MI-SS)|长度7|bytes无千虫问题
+		LONG|超长字符串|最大长度2G(231-1)|足够存储大部头著作
+		RAW|固定长度的二进制数据|最大长度2000|bytes可存放多媒体图象声音等
+		LONG RAW|可变长度的二进制数据|最大长度2G|bytes可存放多媒体图象声音等
+		BLOB|二进制数据|最大长度4G|
+		CLOB|字符数据|最大长度4G|
+		NCLOB|根据字符集而定的字符数据|最大长度4G|
+		BFILE|存放在数据库外的二进制数据|最大长度4G|
+		ROWID|数据表中记录的唯一行号|10|bytes，********.****.****格式，*为0或1
+		NROWID|二进制数据表中记录的唯一行号|最大长度4000|bytes
+		NUMBER(P,S)|数字类型，P为整数位，S为小数位|NUMBER最多占用22个字节|最大可以保存38个十进制位.
+	} 
+
+
+
+
+
+                             数据库名词概念
+
+    1》全量：当前表中的所有数据。
+    2》增量：上次导出之后的数据。
+    3》拉链：就是历史记录，记录一个事物从开始，一直到当前状态的所有变化的信息。
+
+
+
+                             Oracle中的函数和关键字
+    
+    1>>decode(条件，值1，返回值1，值2，返回值2，.....,值n，返回值n，缺省值)函数:
+       IF 条件=值1 THEN
+　　　　	 RETURN(翻译值1)
+       ELSIF 条件=值2 THEN
+　　　　	 RETURN(翻译值2)
+　　　　......
+       ELSIF 条件=值n THEN
+　　　　	 RETURN(翻译值n)
+       ELSE
+　　　　	 RETURN(缺省值)
+       END IF
+
+
+    2>>NVL(eExpression1, eExpression2)(说明:从两个表达式返回一个非 null 值。)
+
+    如果 eExpression1 的计算结果为 null 值，则 NVL( ) 返回 eExpression2。如果 eExpression1 的计算结果不是 null 值，
+    则返回 eExpression1。eExpression1 和 eExpression2 可以是任意一种数据类型。如果 eExpression1 与 eExpression2 
+    的结果皆为 null 值，则 NVL( ) 返回 .NULL.。
+
+    3>> Oracle 数据库中的%Type和%ROWTYPE
+    V_ORG_NAME SF_ORG.ORG_NAME%TYPE; --与ORG_NAME类型相同  
+    V_PARENT_ID SF_ORG.PARENT_ID%TYPE;--与PARENT_ID类型相同
+    
+
+    V_SF_ORG_REC SF_ORG%ROWTYPE; --与SF_ORG表中的各个列相同  
+
+
+
+    4>> Union -->  进行表连接的时候去重复记录
+        Union all --> 进行表连接的时候不去重复记录
+
+    5>> sing(变量1) --> 返回变量的正负值标志;if(变量1>0) {return 1;}else if(变量1==0) {return 0;} 
+                                            else if（变量1<0） {return -1;} 
+                                              
+
+    6>> distinct
+
+	例子1:
+	select count(distinct name) from A;  --表中name去重后的数目， SQL Server支持，而Access不支持
+	例子2:
+	select distinct xing, ming from B
+	返回的结果为两行，这说明distinct并非是对xing和ming两列“字符串拼接”后再去重的，而是分别作用于了xing和ming列。
+
+
+
+
+
+
+
+
+
+
+
+
+
+

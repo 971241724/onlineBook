@@ -1,0 +1,63 @@
+
+					Git的学习总结
+一、
+
+	1.使用cd指令指定路径(根目录是"/")
+	2.pwd指令查看当前的目录
+	3.git init指令在当前目录下创建本地仓库
+	4.git add指令添加文件到仓库，git commit -m 指令提交文件到仓库
+	5.git log查看log
+
+
+
+	git config --global user.email "971241724@qq.com"
+	git config --global user.name "gaohuan"
+
+
+	email 和 name可以随意填写
+
+
+二、
+	
+	1、将项目从Github上克隆到本地仓库
+	(获取密匙:选择Git Gui Here，进去之后，选择左上角的help选项，会出现一个Show SSH Key，
+	然后点击“Generate Key”得到秘钥。将其复制到剪切板。)
+
+	2、打开GitHub，登陆后，打开设置界面，在SSH Keys栏中点击“Add SSH key”按钮，然后复制上面生成的秘钥。
+	(SSH and GPG keys --> title(sshkey) Key(ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDJRHoyXcDFler
+						Zlau0L5duT5iqQ10Ha418Qq2M/1TqGrPI0TYfN5KWflsgWzndZX
+						89Qr5NAY0pPnT4731EQlMO4Kp+I4lWgnrz4O7/PMcguuCkJU3Og
+						4jbU8G7xCKYitI5+RxT/c7l5Y0ln7MLj9TfjgLGNQBnY0mimT5p
+						drZvpugwanDDtNlLszzrnRLKCFvFLRbNlboAJiLjiYrBpze7Bkd
+						qhVOFIflIfqYjR37cEGQtHUFeaZ1JKCwMj8UWX5nW41/8X3mL90
+						YcwTi5B/fF3A0/2VmEs4aa8yippnas+vhm3YIVFv2LQMDz1NYdC
+						QE7xoL3CKcVFG0xADVH5X/F Administrator@SKY-20170725KXZx240)
+						
+	 -->点击Add SSH key)
+
+	 3、克隆的命令:(Clone or download)
+		git clone 克隆的路径
+
+
+
+三、将本地仓库的文件上传到GitHub上。
+	
+	1、将文件拉到自己创建的Git本地仓库中
+	2、git add 需要上传的文件名称
+	3、git commit -m "添加的注释方便以后自己查看"   (和SVN中的注释起到相同的作用)
+	4、在GitHub的页面上创建一个新的仓库 New repository 让后填写新的仓库的名称 Repository name 点击 Create Repository
+	   即可。
+	5、然后再Git命令窗口 git remote add origin https://github.com/971241724/studyFiled.git(自己远程仓库的地址)(git远程添加起源)
+	6、git push -u origin master(即添加自己GitHub的邮箱和密码)
+
+
+
+
+
+
+
+
+
+	直播架构:
+
+	https://github.com/DyncLang/DevLiveBook.git

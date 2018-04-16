@@ -1,0 +1,6 @@
+sqluldr2.exe name/pwd@库名 query="查询的SQL语句" sql=sql脚本的文件名  charset=UTF-8 file="保存的文件路径"  head=
+yes或者no(作用是第一行是否输出列名:默认是no) filed=(指定字段的分隔符，默认为逗号) record=(指定记录分割符，默认为回车
+换行，windos下的换行) safe=yes|no(如果指定为Yes，则客户端缓冲区加倍，称为安全模式。) table=(选项用于将文件导入目标表
+的名称) escape=指定转义字符，默认为空格(不做转义) escf=
+
+

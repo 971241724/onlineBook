@@ -1,0 +1,82 @@
+                             HIVE学习笔记
+     
+     在学习hive时应注意的事项：
+     
+     一、HIVE库的创建:
+        //CREATE DATABASE [IF NOT EXISTS] 数据库名称;
+
+	数据表中的列是有类型的（int, float, string, data, boolean）
+
+	create exteranl table(
+		
+		字段 字段类型，
+		字段 字段类型，
+		字段 字段类型，
+		字段 字段类型
+
+	)
+
+	row format serde 'org.apach.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+	with serdeproperties('filed.delim'='\007',
+			     'line.delim'='\n',
+			     'serialization.format'='\007',
+			     'serialization.null.format'=''
+	)
+	stored as
+	inputformat 'org.apach.hadoop.mapred.TestInputFormat'
+	outputformat 'org.apach.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputformat'
+	location 'hdfs://路径名称'
+
+
+
+
+
+
+
+
+
+     二、表的创建
+
+     1> 在创建表的时候 create [exteranl] table [if not exists] table_name;
+	(if not exists的作用：在创建表的时候如果表名存在，则会抛出异常;可以添加 if not exists语句来忽略这个异常)
+	(EXTERNAL 关键字可以让用户创建一个外部表，在建表的同时指定一个指向实际数据的路径（LOCATION），Hive 创建
+	 内部表时，会将数据移动到数据仓库指向的路径；若创建外部表，仅记录数据所在的路径，不对数据的位置做任何改变。
+	 在删除表的时候，内部表的元数据和数据会被一起删除，而外部表只删除元数据，不删除数据。)
+     
+     2> SerDe是序列化和反序列化的简写:
+	ROW FORMAT SERDE ‘org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe’
+        WITH SERDEPROPERTIES (
+        ‘field.delim’='/t’,
+        ‘escape.delim’='//’,
+        ‘serialization.format'=''
+        )
+	二者必须配合使用。
+
+      3> STORED AS
+         文件的数据类型:如果文件数据是纯文本，可以使用 STORED AS TEXTFILE。如果数据需要压缩，使用 STORED AS SEQUENCE
+      
+
+     	
+
+     
+    
+     
+     
+     1、Hive表增加分区:
+	ALTER TABLE 表名 ADD [IF NOT EXISTS] partition(一级分区名='分区值'，二级分区=‘分区值’)
+	LOCATION 'hdfs://指向hdfs所对应的路径'
+	     
+     2、查看分区：
+        show partitions 表名
+
+     3、删除掉指定分区：
+	ALTER TABLE 表名 DROP IF EXISTS PARTITION(一级分区名='分区值'，二级分区=‘分区值’)
+
+     
+     注: hive不支持用insert语句一条一条的进行插入操作，也不支持update操作。数据是以load的方式加载到建立好的表中。
+         数据一旦导入就不可以修改。
+
+        
+    
+
+

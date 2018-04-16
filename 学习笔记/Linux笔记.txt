@@ -1,0 +1,63 @@
+                                       
+				       
+				       Linux系统
+
+
+(1)  xshell连接虚拟机的Linux操作系统的详细步骤:
+
+     1》首先在Linux系统安装SSH服务。
+
+        yum install ssh           //安装SSH
+        
+        service sshd start        //启动SSH
+
+	chkconfig sshd on         //设置开机运行
+
+     2》查看IP地址，在管理员权限下修改IP地址。
+
+        sudo vi /etc/sysconfig/network-scripts/ifcfg-eth0
+
+	DEVICE=eth0
+	ONBOOT=yes
+	BOOTPROTO=static
+	IPADDR=10.55.15.168
+	NETMASK=255.255.255.0
+	GATEWAY=10.55.15.1
+
+	其中IPADDR是根据自己需要设置的。我在前面设置虚拟机专用网络的ip为54网段的，
+	我的IPADDR设置的就是10.55.15.168,GATEWAY设置的就是10.55.15.1,设置完成后，
+	保存退出。
+
+     3》关闭Linux的防火墙
+        
+	service iptables stop
+
+     4》启动ssh服务
+
+        service sshd start
+
+
+(2)  Linux系统下部署web项目详细流程
+     
+
+
+
+
+(3)  shell完成定时任务调度
+
+     1>> 写好自己的shell脚本代码 如：test.sh
+
+     2>> 启动crontab服务    命令如下:service cron start
+
+     3>> vi crontab -e 进入编辑任务调度
+         */2	*	*	*	*     /bin/sh /home/cloudera/gaohuan/test.sh
+        分钟   小时     天     月份     星期
+        (每两分钟调度执行一次test.sh)
+
+     4>>相关命令：crontab -l  查看你的任务
+
+		 crontab-e    编辑你的任务
+
+		 crontab-r    删除用户的crontab的内容
+                
+		 cat /var/spool/mail/cloudera    查看执行哪一个任务调度
