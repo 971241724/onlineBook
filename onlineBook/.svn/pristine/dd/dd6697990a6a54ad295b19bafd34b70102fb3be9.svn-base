@@ -1,0 +1,72 @@
+package com.b2c.action;
+
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.b2c.entity.Book;
+import com.b2c.entity.BookType;
+import com.b2c.service.IBookService;
+import com.b2c.service.IBookTypeService;
+import com.b2c.utils.PageBean;
+
+@Controller
+public class BookTypeAction {
+	
+	final Integer PS = 8;
+	
+	@Resource(name="bookTypeServiceImp")
+	private IBookTypeService bookTypeServiceImp;
+	
+	@Resource(name="bookServiceImp")
+	private IBookService bookServiceImp;
+	
+	/**
+	 * 查询图书的类型和部分图书
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("selectAllBook.action")
+	public String selectAllBook(Model model){
+		List<BookType> selectAllBook = bookTypeServiceImp.selectAllBook();
+		for(BookType b : selectAllBook){
+			b.setBook(b.getBook().subList(0, 4));
+			System.out.println(b.toString());
+		}
+		model.addAttribute("allbook", selectAllBook);
+		return "forward:/fruit_page/productslistfresh.jsp";
+	}
+	/**
+	 * 根据图书的类型查询图书+图书分页
+	 * @return
+	 * @throws UnsupportedEncodingException 
+	 */
+	@RequestMapping(value="selectBookType.action")
+	public String selectBookType(String book_type,Model model,Integer pc) throws UnsupportedEncodingException{
+		String book_types = new String(book_type.getBytes("ISO-8859-1"),"UTF-8");
+		if(pc == null){
+			pc = 1;
+		}
+		PageBean<Book> selectBookType = bookServiceImp.selectBookType(book_types, pc, PS);
+		model.addAttribute("bookType", selectBookType);
+		model.addAttribute("book_type", book_types);
+		return "forward:/fruit_page/bookType.jsp";
+	}
+	
+
+	@RequestMapping("selectDownSaleBook.action")
+	public String selectDownSaleBook(Model model){
+		List<BookType> selectDownSaleBook = bookTypeServiceImp.selectDownSaleBook();
+		for(BookType b : selectDownSaleBook){
+			System.out.println(b.toString());
+		}
+		model.addAttribute("downsalebook", selectDownSaleBook);
+		return "forward:/fruit_page/productslistdiscount.jsp";
+	}
+
+}

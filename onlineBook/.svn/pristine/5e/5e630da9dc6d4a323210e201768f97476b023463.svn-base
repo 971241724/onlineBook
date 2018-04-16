@@ -1,0 +1,28 @@
+package com.b2c.service;
+
+import com.b2c.entity.Eval;
+import com.b2c.utils.PageBean;
+
+/**
+ * 对图书评价接口
+ * @author Administrator
+ *
+ */
+public interface IEvalService {
+	 /**
+     * 通过用户Id查询评价
+     * @param user_id
+     * @param pc
+     * @param ps
+     * @return
+     */
+	public PageBean<Eval> selectEvalgetUserID(Integer user_id,Integer pc,Integer ps);
+	
+	/**
+	 * 删除图书的评价
+	 * @param eval_id
+	 * @return
+	 */
+	public boolean deleteEvalId(Integer eval_id);
+	
+}

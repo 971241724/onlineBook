@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SysOperateLog">
+
+	<resultMap type="com.b2c.entity.SysOperateLog" id="SysOperateLogMap">
+		<id property="log_id" column="log_id"></id>
+		<result property="user_name" column="user_name"></result>
+		<result property="table_name" column="table_name"></result>
+		<result property="result" column="result"></result>
+		<result property="module" column="module"></result>
+		<result property="operation" column="operation"></result>
+		<result property="create_time" column="create_time"></result>
+		<result property="visit_ip" column="visit_ip"></result>
+		<result property="local_ip" column="local_ip"></result>
+	</resultMap>
+	
+	<insert id="addSysOperateLog" parameterType="com.b2c.entity.SysOperateLog">
+		insert into sysOperateLog(log_id,user_name,table_name,result,module,operation,create_time,visit_ip,local_ip)
+		values(#{log_id},#{user_name},#{table_name},#{result},#{module},#{operation},#{create_time},#{visit_ip},#{local_ip})
+	</insert>
+	
+	<select id="selectLog" resultType="com.b2c.entity.SysOperateLog" parameterType="java.util.Map" >
+		select * from sysoperatelog limit #{startPc},#{ps}
+	</select>
+	
+	<select id="selectLogCount" resultType="int">
+		select count(*) from sysoperatelog
+	</select>
+	
+	<delete id="deleteLog" parameterType="int">
+		delete from sysoperatelog where log_id=#{log_id}
+	</delete>
+	
+</mapper>

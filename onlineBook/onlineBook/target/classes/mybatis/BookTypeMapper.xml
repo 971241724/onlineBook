@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BookType">
+	<resultMap type="com.b2c.entity.BookType" id="BookTypeMap">
+		<id property="bookType_id" column="bookType_id"></id>
+		<result property="bookType_name" column="bookType_name"></result>
+		<result property="bookType_url" column="bookType_url"></result>
+		<collection property="book" resultMap="Book.BookMap"></collection>
+	</resultMap>
+	
+	<select id="selectAllBook" resultMap="BookTypeMap">
+		select b.*,bt.* from book as b,book_type as bt where bt.bookType_id = b.book_type_id
+	</select>
+	
+	<select id="selectDownSaleBook" resultMap="BookTypeMap">
+		select b.*,bt.* from book as b,book_type as bt where bt.bookType_id = b.book_type_id and b.down_sale = 1
+	</select>
+	
+	<select id="selectBookType" resultType="com.b2c.entity.BookType" parameterType="string">
+		select * from book_type where bookType_name=#{bookType_name}
+	</select>
+	
+	<insert id="addBookType" parameterType="com.b2c.entity.BookType">
+		insert into book_type(bookType_id,bookType_name) values(#{bookType_id},#{bookType_name})
+	</insert>
+	
+</mapper>
