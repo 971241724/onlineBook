@@ -1,0 +1,106 @@
+
+
+1、在properties文件中配置多个数据库连接即：
+
+	jdbc.driver=com.mysql.jdbc.Driver
+	jdbc.url=jdbc:mysql://localhost:3306/bookshop?useUnicode=true&characterEncoding=utf-8
+	jdbc.user=root
+	jdbc.password=root
+
+	jdbc.driver1=com.mysql.jdbc.Driver
+	jdbc.url1=jdbc:mysql://localhost:3306/db_actvt?useUnicode=true&characterEncoding=utf-8
+	jdbc.user1=root
+	jdbc.password1=root
+
+
+2、在Spring的核心xml文件中创建多个数据源，并创建一自定义的DynamicDataSource对象
+   DynamicDataSource继承AbstractRoutingDataSource抽象类
+   (建议查看AbstractRoutingDataSource的源码)
+   并设置他的targetDataSources和defaultTargetDataSource属性值，即：
+	
+	<bean id="dataSourceOne" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver}"/>
+		<property name="jdbcUrl" value="${jdbc.url}"/>
+		<property name="user" value="${jdbc.user}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+	
+	<bean id="dataSourceTwo" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver1}"/>
+		<property name="jdbcUrl" value="${jdbc.url1}"/>
+		<property name="user" value="${jdbc.user1}"/>
+		<property name="password" value="${jdbc.password1}"/>
+	</bean>
+	<!-- 默认配置的数据源是dataSourceOne，在每次切换数据库后不需要改回
+	  默认的数据库，每次请求后都会从配置文件设置成默认的数据库 -->
+	<bean id="dataSource" class="com.b2c.utils.DynamicDataSource">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<entry value-ref="dataSourceOne" key="dataSourceOne"></entry>
+				<entry value-ref="dataSourceTwo" key="dataSourceTwo"></entry>
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="dataSourceOne"></property>
+	</bean>
+
+	<!-- 配置Mybatis的事务管理器，即因为Mybatis底层用的是JDBC事务管事器，所以在这里依然配置JDBC事务管理器 -->
+        <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+      		<property name="dataSource" ref="dataSource"/>
+        </bean>
+
+
+3、Spring整合Mybatis的XML文件配置即:
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
+		<property name="typeAliasesPackage" value="com.b2c.entity" />
+		<!-- 显式指定Mapper文件位置 -->
+		<property name="mapperLocations" value="classpath:mybatis/**/*Mapper.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+
+
+4、自定义两个类DynamicDataSource和DataSourceContextHolder即：
+
+	public class DynamicDataSource extends AbstractRoutingDataSource{
+
+
+		@Override
+		protected Object determineCurrentLookupKey() {
+			//System.out.println("1231231");
+			return DataSourceContextHolder.get();
+		}
+	
+		
+	}
+
+	public class DataSourceContextHolder{
+	
+		private static final ThreadLocal<String> contextholder = new ThreadLocal<String>();
+
+		public static String get() {
+			return contextholder.get();
+		}
+
+		public static void set(String value) {
+			contextholder.set(value);
+		}
+
+		public static void remove() {
+			contextholder.remove();
+		}
+	
+	
+	}
+
+
+5、在客户端发送请求时，在控制层调用DataSourceContextHolder.set("dataSourceTwo")
+   即可。
+
+
+
+   注：想弄清楚看AbstractRoutingDataSource源码
