@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ActivitiRePro">
+	<resultMap type="com.b2c.entity.ActivitiRePro" id="ActivitiReProMap">
+		<result property="REV_" column="REV_"></result>
+		<result property="CATEGORY_" column="CATEGORY_"></result>
+		<result property="NAME_" column="NAME_"></result>
+		<result property="KEY_" column="KEY_"></result>
+	</resultMap>
+	
+	<select id="selectActivitiRePro" resultType="com.b2c.entity.ActivitiRePro">
+		select REV_,CATEGORY_,NAME_,KEY_ from act_re_procdef
+	</select>
+	
+</mapper>

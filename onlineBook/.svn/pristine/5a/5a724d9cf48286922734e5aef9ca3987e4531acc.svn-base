@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Eval">
+
+	<resultMap type="com.b2c.entity.Eval" id="EvalMap">
+		<id property="eval_id" column="eval_id"></id>
+		<result property="user_id" column="user_id"></result>
+		<result property="book_id" column="book_id"></result>
+		<result property="eval_content" column="eval_content"></result>
+		<result property="eval_time" column="eval_time"></result>
+		<result property="eval_score" column="eval_score"></result>
+		<association property="book" javaType="com.b2c.entity.Book">
+			<id property="book_id" column="book_id"></id>
+			<result property="book_name" column="book_name"></result>
+			<result property="book_type" column="book_type"></result>
+			<result property="datetime" column="datetime"></result>
+			<result property="price" column="price"></result>
+			<result property="url" column="url"></result>
+			<result property="sales" column="sales"></result>
+			<result property="down_sale" column="down_sale"></result>
+		    <result property="t_Price" column="t_Price"></result>
+		</association>
+		<association property="user" javaType="com.b2c.entity.User">
+			<id property="user_id" column="user_id"></id>
+			<result property="user_no" column="user_no"></result>
+			<result property="user_name" column="user_name"></result>
+			<result property="user_pwd" column="user_pwd"></result>
+			<result property="user_phone" column="user_phone"></result>
+			<result property="user_mail" column="user_mail"></result>
+			<result property="user_site" column="user_site"></result>
+		</association>
+	</resultMap>
+	
+	<select id="selectEvalCount" resultType="int" parameterType="int">
+		select count(*) from eval where user_id = #{user_id}
+	</select>
+	
+	<select id="selectEvalgetUserID" resultMap="EvalMap" parameterType="java.util.Map">
+		select e.*,b.* from eval as e,book as b where e.book_id = b.book_id and e.user_id = #{user_id} limit #{startPc},#{ps}
+	</select>
+	
+	<delete id="deleteEvalId" parameterType="int">
+		delete from eval where eval_id = #{eval_id}
+	</delete>
+	
+	<!-- <select id="selectEvalgetBookId" resultMap="EvalMap" parameterType="java.util.Map">
+		select e.*,b.*,u.* from eval as e,book as b,user as u where e.user_id=u.user_id and e.book_id=b.book_id and e.book_id=#{book_id} limit #{startPc},#{ps}
+	</select>
+	
+	<select id="selectEvalBookIdCount" resultType="int" parameterType="int">
+		select count(*) from eval where book_id = #{book_id}
+	</select> -->
+	
+</mapper>

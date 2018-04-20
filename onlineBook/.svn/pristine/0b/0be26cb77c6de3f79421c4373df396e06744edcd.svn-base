@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Order">
+	
+	<resultMap type="com.b2c.entity.Order" id="OrderMap">
+		<id property="order_id" column="order_id"></id>
+		<result property="user_id" column="user_id"></result>
+		<result property="order_state" column="order_state"></result>
+		<result property="access" column="access"></result>
+		<result property="buy_date" column="buy_date"></result>
+		<result property="amount" column="amount"></result>
+		<result property="pay_date" column="pay_date"></result>
+		<collection property="orderBooks" resultMap="OrderBooks.OrderBooksMap">
+			<id property="books_id" column="books_id"></id>
+			<result property="order_id" column="order_id"></result>
+			<result property="cart_id" column="cart_id"></result>
+			<result property="book_id" column="book_id"></result>
+			<result property="number" column="number"></result>
+			<association property="book" javaType="com.b2c.entity.Book">
+				<id property="book_id" column="book_id"></id>
+				<result property="book_name" column="book_name"></result>
+				<result property="book_type" column="book_type"></result>
+				<result property="datetime" column="datetime"></result>
+				<result property="price" column="price"></result>
+				<result property="url" column="url"></result>
+				<result property="sales" column="sales"></result>
+				<result property="down_sale" column="down_sale"></result>
+		    	<result property="t_Price" column="t_Price"></result>
+		    	<result property="stock" column="stock"></result>
+			</association>
+		</collection>
+	</resultMap>
+	
+	<insert id="addMyOrder" parameterType="java.util.Map">
+		INSERT INTO bookshop.order(order_id,user_id,order_state,access,buy_date,amount) VALUES (#{order_id},#{user_id}, #{order_state}, #{access}, #{buy_date}, #{amount}); 
+	</insert>
+	
+	<select id="getOrder_id" resultType="com.b2c.entity.Order" parameterType="int">
+		select * from bookshop.order where user_id=#{user_id} and order_state=0
+	</select>
+	
+	<delete id="deleteOrder" parameterType="int">
+		delete from bookshop.order where order_id=#{order_id}
+	</delete>
+	
+	<update id="submitOrder" parameterType="java.util.Map">
+		update bookshop.order set order_state=#{order_state},pay_date=#{pay_date} where order_id=#{order_id}
+	</update>
+	
+	<select id="selectSaleBook" resultMap="OrderMap" parameterType="int">
+		select o1.*,o2.*,b.* from bookshop.order as o1,orderBooks as o2,book as b where o2.book_id=b.book_id and o1.order_id=o2.order_id and o1.user_id=#{user_id} and o1.order_state=0
+	</select>
+</mapper>

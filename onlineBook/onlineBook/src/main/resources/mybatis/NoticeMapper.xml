@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Notice" >
+	<resultMap type="com.b2c.entity.Notice" id="notices">
+		<id column="notice_id" property="notice_id" />
+		<result column="notice_title" property="notice_title"/>
+		<result column="notice_content" property="notice_content"/>
+		<result column="notice_date" property="notice_date"/>
+		<result column="notice_level" property="notice_level"/>
+	</resultMap>
+	
+	<insert id="addNotice" parameterType="com.b2c.entity.Notice" useGeneratedKeys="true">
+		INSERT INTO notice(notice_title,notice_content,notice_date,notice_level) values(
+	  	#{notice_title},
+	  	#{notice_content},
+	  	#{notice_date},
+	  	#{notice_level});
+	</insert>
+	
+	<delete id="delNotice" parameterType="java.lang.Integer">
+		DELETE FROM notice WHERE notice_id=#{id}
+	</delete>
+	
+	<update id="updateNotice" parameterType="com.b2c.entity.Notice">
+		UPDATE notice set notice_title=#{notice_title},notice_content=#{notice_content},notice_date=#{notice_date},notice_level=#{notice_level} WHERE notice_id=#{notice_id}; 
+	</update>
+	
+	<select id="findbyid" parameterType="java.lang.Integer" resultType="com.b2c.entity.Notice">
+		SELECT notice_id,notice_title,notice_content,notice_date,notice_level FROM notice WHERE notice_id=#{notice_id};
+	</select>
+	
+	<select id="findbyall" resultType="com.b2c.entity.Notice">
+		 SELECT notice_id,notice_title,notice_content,notice_date,notice_level FROM notice ORDER BY notice_date DESC limit #{startPc},#{ps};	
+	</select>
+	
+	<select id="selectforcountNotice" resultType="java.lang.Integer">
+		SELECT COUNT(notice_id) FROM notice
+	</select>
+</mapper>
